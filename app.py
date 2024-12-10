@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import json
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
@@ -38,5 +39,14 @@ def log():
     print("Data logged:", logged_data)  # For debugging
     return jsonify({"status": "success", "data": logged_data})
 
+@app.route('/logs', methods=['GET'])
+def get_logs():
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "r") as f:
+            logs = f.read()
+        return jsonify({"status": "success", "logs": logs})
+    else:
+        return jsonify({"status": "error", "message": "Log file not found"}), 404
+
 if __name__ == '__main__':
-    app.run(debug=True , host='0.0.0.0', port=5000)
+    app.run(debug=True , host='0.0.0.0', port=8000)
