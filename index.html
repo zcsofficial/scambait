@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verify Your Details</h1>
+        <button class="btn" onclick="sendData()">Verify Now</button>
+    </div>
+
+    <script>
+        async function sendData() {
+            const deviceInfo = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                screenResolution: `${window.screen.width}x${window.screen.height}`,
+            };
+
+            try {
+                await fetch('/log', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ device_info: deviceInfo })
+                });
+
+                // Redirect to Paytm's Google Play gift card page
+                window.location.href = "https://paytm.com/google-play-gift-card-recharge";
+            } catch (error) {
+                console.error("Error logging data:", error);
+                // Redirect even if logging fails
+                window.location.href = "https://paytm.com/google-play-gift-card-recharge";
+            }
+        }
+    </script>
+</body>
+</html>
